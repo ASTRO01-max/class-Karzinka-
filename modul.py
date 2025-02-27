@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from uuid import uuid4 as id
+from uuid import uuid4
 from datetime import datetime
 
 class Product(ABC):
@@ -25,11 +25,11 @@ class Electronics(Product):
         super().__init__(name, price, quantity)
         self.warranty = warranty
         self.brand = brand
-        self.__e_id = id()
+        self.__e_id = uuid4()  # ID generatsiyasi to'g'ri joyga qo'yildi
 
     def info(self):
-        print(f"Brandi: {self.brand}, Nomi: {self.name}, Narxi: {self.price}, Soni: {self.quantity}, Garantiya: {self.warranty}")
-        return f"mahsulot ID raqami: {self.__e_id}"
+        return (f"Brendi: {self.brand}, Nomi: {self.name}, Narxi: {self.price}, "
+                f"Soni: {self.quantity}, Garantiya: {self.warranty}, ID: {self.__e_id}")
 
     def sell(self, amount):
         if amount > self.quantity:
@@ -44,20 +44,24 @@ class Electronics(Product):
 class Food(Product):
     def __init__(self, name, price, quantity, expiration_date):
         super().__init__(name, price, quantity)
-        self.expiration_date = expiration_date  
+        self.expiration_date = datetime.strptime(expiration_date, "%Y-%m-%d")  # Satrni datetime formatga o'tkazdik
 
     def info(self):
-        print(f"Nomi: {self.name}, Narxi: {self.price}, Soni: {self.quantity}, Garantiya: {self.expiration_date}")
-    
+        return (f"Nomi: {self.name}, Narxi: {self.price}, Soni: {self.quantity}, "
+                f"Muddati: {self.expiration_date.strftime('%Y-%m-%d')}")
+
     def sell(self, amount):
-        if self.expiration_date > "2025-02-11":  
+        if self.expiration_date < datetime.now():  # To'g'ri solishtirish
             return "Xatolik: mahsulot muddati o'tgan!"
-        return super().sell(amount)
-    
+        if amount > self.quantity:
+            return f"Xatolik: Omborda faqat {self.quantity} dona bor!"
+        self.quantity -= amount
+        return f"{amount} dona {self.name} sotildi. Omborda qolgan: {self.quantity}"
+
     def restock(self, amount):
         self.quantity += amount
         return f"{amount} dona {self.name} omborga qo'shildi. Yangi soni: {self.quantity}"
-    
+
 class Household(Product):
     def __init__(self, name, price, quantity, material, size, brand=None):
         super().__init__(name, price, quantity)
@@ -86,6 +90,7 @@ class Household(Product):
         elif self.material.lower() in ["mato", "yog'och"]:
             return "Quruq shimgich yoki maxsus vosita bilan tozalash tavsiya etiladi."
         return "Tozalash bo'yicha maxsus tavsiyalar yo'q."
+
     
 class Manageproduct:
     def __init__(self):
@@ -117,7 +122,7 @@ class Parking:
     def __init__(self, residence, num):
         self.residence = residence
         self.num = num
-        self.__r_id = id()
+        self.__r_id = uuid4()
         self.lst = []
 
     def parking(self):
@@ -131,7 +136,7 @@ class Parking:
 
 class SecurityCamera:
     def __init__(self, brand, resolution, night_vision=False, motion_detection=False):
-        self.camera_id = id()
+        self.camera_id = uuid4()
         self.brand = brand
         self.resolution = resolution
         self.night_vision = night_vision
@@ -215,7 +220,7 @@ class ShoppingReceipt:
     def add_purchase(self, product_name, price):
         payment_result = self.payment_method.process_payment(price)
         if "to'landi" in payment_result:
-            transaction_id = str(id())
+            transaction_id = str(uuid4())
             self.receipt.append({"id": transaction_id, "product": product_name, "price": price})
             return f"Xarid muvaffaqiyatli amalga oshirildi! ID: {transaction_id}\n{payment_result}"
         return payment_result
@@ -234,7 +239,7 @@ class Person(ABC):
         self.surname = surname
         self.position = position
         self.salary = salary
-        self.w_id = str(id.uuid4())  # Xatoni to‘g‘rilash
+        self.w_id = str(uuid4())
         self.phone = None
         self.email = None
         self.work_hours = 0
@@ -361,7 +366,7 @@ class Basket:
         self.savat2 = {} 
 
     def mahsulot_qosh(self, nomi, narxi, miqdor=1):
-        mahsulot_id = str(id())  
+        mahsulot_id = str(uuid4())  
         self.savat[mahsulot_id] = (nomi, narxi, miqdor)
         print(f" {nomi} ({miqdor} dona) savatchaga qo'shildi. ID: {mahsulot_id}")
         return mahsulot_id
