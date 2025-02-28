@@ -25,7 +25,7 @@ class Electronics(Product):
         super().__init__(name, price, quantity)
         self.warranty = warranty
         self.brand = brand
-        self.__e_id = uuid4()  # ID generatsiyasi to'g'ri joyga qo'yildi
+        self.__e_id = uuid4()  
 
     def info(self):
         return (f"Brendi: {self.brand}, Nomi: {self.name}, Narxi: {self.price}, "
@@ -44,14 +44,14 @@ class Electronics(Product):
 class Food(Product):
     def __init__(self, name, price, quantity, expiration_date):
         super().__init__(name, price, quantity)
-        self.expiration_date = datetime.strptime(expiration_date, "%Y-%m-%d")  # Satrni datetime formatga o'tkazdik
+        self.expiration_date = datetime.strptime(expiration_date, "%Y-%m-%d")
 
     def info(self):
         return (f"Nomi: {self.name}, Narxi: {self.price}, Soni: {self.quantity}, "
                 f"Muddati: {self.expiration_date.strftime('%Y-%m-%d')}")
 
     def sell(self, amount):
-        if self.expiration_date < datetime.now():  # To'g'ri solishtirish
+        if self.expiration_date < datetime.now(): 
             return "Xatolik: mahsulot muddati o'tgan!"
         if amount > self.quantity:
             return f"Xatolik: Omborda faqat {self.quantity} dona bor!"
@@ -407,4 +407,4 @@ class Basket:
         self.savat.clear()
         self.savat2.clear()
         print(" Barcha savatlar tozalandi!")
-    
+        

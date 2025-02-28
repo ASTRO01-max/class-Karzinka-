@@ -1,5 +1,6 @@
 from modul import *
 from uuid import uuid4
+import json
 
 basket = Basket()
 management = Management("Admin", "Adminov", "Manager")
@@ -9,6 +10,17 @@ products = [
     Food("Olma", 2, 50, "2025-05-10"),
     Electronics("Noutbuk", 1000, 5, 2, "HP")
 ]
+
+path = "order.json"
+
+def read():
+    with open(path, "r") as file:
+        data = json.load(file)
+    return data
+
+def write(data):
+    with open(path, "w") as file:
+        json.dump(data, file, indent=4)
 
 receipt = None
 
